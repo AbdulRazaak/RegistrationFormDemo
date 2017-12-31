@@ -1,4 +1,5 @@
 <?php include 'database.php'; ?>
+
 <?php
 
 if (!empty($_POST['name']) && !empty($_POST['pass1'])) {
@@ -10,7 +11,7 @@ if (!empty($_POST['name']) && !empty($_POST['pass1'])) {
     } elseif (mysqli_num_rows($result) == 1) {
         $result = mysqli_query($con, "SELECT password FROM user WHERE name='$name'");
         $retrievepassword = mysqli_fetch_assoc($result);
-        if(!password_verify($password, $retrievepassword['password']))
+        if($retrievepassword['password'] !== $password) //!password_verify($password, $retrievepassword['password']))
         {
             echo "Password is incorrect";
         }
@@ -30,22 +31,34 @@ if (!empty($_POST['name']) && !empty($_POST['pass1'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-<div id="container">
-    <header>
-        <h1>Login</h1>
-    </header>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <label>Name:     </label>
-        <input type="text" name="name" id="name" placeholder="Enter User Name">
-        <span class="error">* <?php echo $nameErr;?></span>
-        <br><br>
-        <label>Password: </label>
-        <input type="password" name="pass1" id="pass" placeholder="Enter Password">
-        <span class="error">* <?php echo $passErr1;?></span>
-        <br><br>
-        <input type="submit" name="register" id="submit" value="Login">
+<div class="container">
+    <h2>Login</h2>
+    <form class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <div class="form-group">
+            <label class="control-label col-sm-2">Name:     </label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Enter User Name">
+                <span class="alert-danger"><?php echo $nameErr;?></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Password: </label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" name="pass1" id="pass" placeholder="Enter Password">
+                <span class="alert-danger"><?php echo $passErr1;?></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-success" name="register" id="submit" value="Login">
+                <a href="index.php" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
     </form>
     <footer>
     </footer>
